@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 const PORT = process.env.PORT || 8080;
 const uri = "mongodb://127.0.0.1:27017";
-
+const DBPASS = process.env.DBPASS;
 const MongoClient = require('mongodb').MongoClient;
 
 var port = PORT;
