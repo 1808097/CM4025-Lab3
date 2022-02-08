@@ -1,15 +1,11 @@
 var express = require('express');
 var app = express();
 const PORT = process.env.PORT || 8080;
-const uri = "mongodb://127.0.0.1:27017";
-const DBPASS = process.env.DBPASS;
+const DBURI = process.env.DBURI || "mongodb://127.0.0.1:27017"
+
+const uri = DBURI
+
 const MongoClient = require('mongodb').MongoClient;
-
-var port = PORT;
-
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/Just Some User Input.html');
-});
 
 app.route('/login')
 .get(function(req, res) {
@@ -19,6 +15,7 @@ app.route('/login')
     var input2 = req.query.input2;
     console.log('The params:' + req.query.input1 + " " + req.query.input2);
     
+
     MongoClient.connect(uri, function (err, db) {
         if(err) throw err;
         console.log('Start the database stuff');
@@ -36,6 +33,11 @@ app.route('/login')
 .post(function(req, res) { console.log('processing');
     res.send('processing the login form!');
 });
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/Just Some User Input.html');
+});
+
 
 var adminRouter = express.Router();
 
@@ -57,7 +59,7 @@ adminRouter.param('name', function(req, res, next, name) {
     });
 
 adminRouter.get('/users/:name', function(req, res) {
-    res.send('hello ' + req.name + '!'); 
+    res.send('hello ' + req.params.name + '!'); 
 });
 
 adminRouter.get('/posts', function(req, res) {
